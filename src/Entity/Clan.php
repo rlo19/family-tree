@@ -24,9 +24,9 @@ class Clan
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Image", mappedBy="clan")
+     * @ORM\Column(type="datetime")
      */
-    private $images;
+    private $created_date;
 
     /**
      * @ORM\Column(type="string", length=50)
@@ -36,7 +36,7 @@ class Clan
     /**
      * @ORM\Column(type="datetime")
      */
-    private $created_date;
+    private $modified_date;
 
     /**
      * @ORM\Column(type="string", length=50)
@@ -44,13 +44,18 @@ class Clan
     private $modified_by;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="clan")
      */
-    private $modified_date;
+    private $users;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Picture", mappedBy="clan", cascade={"persist", "remove"})
+     */
+    private $picture;
 
     public function __construct()
     {
-        $this->images = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -70,30 +75,14 @@ class Clan
         return $this;
     }
 
-    /**
-     * @return Collection|Image[]
-     */
-    public function getImages(): Collection
+    public function getCreatedDate(): ?\DateTimeInterface
     {
-        return $this->images;
+        return $this->created_date;
     }
 
-    public function addImage(Image $image): self
+    public function setCreatedDate(\DateTimeInterface $created_date): self
     {
-        if (!$this->images->contains($image)) {
-            $this->images[] = $image;
-            $image->addClan($this);
-        }
-
-        return $this;
-    }
-
-    public function removeImage(Image $image): self
-    {
-        if ($this->images->contains($image)) {
-            $this->images->removeElement($image);
-            $image->removeClan($this);
-        }
+        $this->created_date = $created_date;
 
         return $this;
     }
@@ -110,14 +99,14 @@ class Clan
         return $this;
     }
 
-    public function getCreatedDate(): ?\DateTimeInterface
+    public function getModifiedDate(): ?\DateTimeInterface
     {
-        return $this->created_date;
+        return $this->modified_date;
     }
 
-    public function setCreatedDate(\DateTimeInterface $created_date): self
+    public function setModifiedDate(\DateTimeInterface $modified_date): self
     {
-        $this->created_date = $created_date;
+        $this->modified_date = $modified_date;
 
         return $this;
     }
@@ -134,14 +123,48 @@ class Clan
         return $this;
     }
 
-    public function getModifiedDate(): ?\DateTimeInterface
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
     {
-        return $this->modified_date;
+        return $this->users;
     }
 
-    public function setModifiedDate(\DateTimeInterface $modified_date): self
+    public function addUser(User $user): self
     {
-        $this->modified_date = $modified_date;
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addClan($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            $user->removeClan($this);
+        }
+
+        return $this;
+    }
+
+    public function getPicture(): ?Picture
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(?Picture $picture): self
+    {
+        $this->picture = $picture;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newClan = null === $picture ? null : $this;
+        if ($picture->getClan() !== $newClan) {
+            $picture->setClan($newClan);
+        }
 
         return $this;
     }

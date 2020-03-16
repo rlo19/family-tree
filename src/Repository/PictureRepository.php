@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Person;
+use App\Entity\Picture;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
- * @method Person|null find($id, $lockMode = null, $lockVersion = null)
- * @method Person|null findOneBy(array $criteria, array $orderBy = null)
- * @method Person[]    findAll()
- * @method Person[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Picture|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Picture|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Picture[]    findAll()
+ * @method Picture[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PersonRepository extends ServiceEntityRepository
+class PictureRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Person::class);
+        parent::__construct($registry, Picture::class);
     }
 
     // /**
-    //  * @return Person[] Returns an array of Person objects
+    //  * @return Picture[] Returns an array of Picture objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class PersonRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Person
+    public function findOneBySomeField($value): ?Picture
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.exampleField = :val')
